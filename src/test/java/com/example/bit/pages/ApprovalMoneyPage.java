@@ -1,30 +1,47 @@
 package com.example.bit.pages;
 
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+/**
+ * Page Object for Android Approval Money Screen
+ * Represents the approval money confirmation page in the Android app
+ */
 public class ApprovalMoneyPage extends BasePage {
 
-    @FindBy(id = "approvalButton")
+    private static final Logger logger = LogManager.getLogger(ApprovalMoneyPage.class);
+
+    // ============================================
+    // Android Page Elements
+    // ============================================
+    // Format: package:id/element_name
+    // Get these from Appium Inspector or adb uiautomator dump
+
+    @AndroidFindBy(id = "com.example.approvalapp:id/approve_button")
     private WebElement approveTransferButton;
 
-    @FindBy(id = "confirmationMessage")
+    @AndroidFindBy(id = "com.example.approvalapp:id/confirmation_message")
     private WebElement confirmationMessage;
 
-    @FindBy(className = "popup-overlay")
-    private WebElement popupOverlay;
+    @AndroidFindBy(id = "com.example.approvalapp:id/confirmation_title")
+    private WebElement confirmationTitle;
 
-    // Alternative CSS selectors (examples - adjust as needed for actual HTML)
-    private By APPROVE_BUTTON_CSS = By.cssSelector("button.approve-btn");
-    private By CONFIRMATION_TEXT_CSS = By.cssSelector(".confirmation-message");
-    private By CLOSE_BUTTON = By.id("closeButton");
+    @AndroidFindBy(id = "com.example.approvalapp:id/close_button")
+    private WebElement closeButton;
 
-    public ApprovalMoneyPage(WebDriver driver) {
+    public ApprovalMoneyPage(AndroidDriver driver) {
         super(driver);
-        wait.until(ExpectedConditions.visibilityOf(confirmationMessage));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(confirmationMessage));
+            logger.info("✅ ApprovalMoneyPage loaded");
+        } catch (Exception e) {
+            logger.warn("⚠️ Timeout waiting for confirmation message: {}", e.getMessage());
+        }
     }
 
     /**
@@ -32,50 +49,70 @@ public class ApprovalMoneyPage extends BasePage {
      */
     public boolean isApprovalPopupDisplayed() {
         try {
-            wait.until(ExpectedConditions.visibilityOf(popupOverlay));
-            return popupOverlay.isDisplayed();
+            wait.until(ExpectedConditions.visibilityOf(confirmationTitle));
+            logger.info("✅ Approval popup is displayed");
+            return confirmationTitle.isDisplayed();
         } catch (Exception e) {
+            logger.warn("⚠️ Approval popup not found: {}", e.getMessage());
             return false;
         }
     }
 
     /**
-     * Click on the "אשר העברה" (Approve Transfer) button
+     * Click on the "Approve Transfer" button
      */
     public ApprovalMoneyPage clickApproveTransferButton() {
+        logger.info("Clicking approve button");
         WebElement button = wait.until(ExpectedConditions.elementToBeClickable(approveTransferButton));
         button.click();
         return this;
     }
 
-
-
     /**
      * Get the confirmation message text
-     * Expected: "הכסף הועבר לחשבונך" (The money was transferred to your account)
+     * Expected: "The money was transferred to your account" or Hebrew equivalent
      */
     public String getConfirmationMessage() {
+        logger.info("Getting confirmation message text");
         wait.until(ExpectedConditions.visibilityOf(confirmationMessage));
-        return confirmationMessage.getText();
+        String messageText = confirmationMessage.getText();
+        logger.info("Confirmation message: {}", messageText);
+        return messageText;
     }
 
     /**
      * Verify the confirmation message is displayed and contains expected text
      */
     public boolean isConfirmationMessageDisplayed(String expectedText) {
+        logger.info("Checking if confirmation message contains: {}", expectedText);
         try {
             wait.until(ExpectedConditions.textToBePresentInElement(confirmationMessage, expectedText));
-            return confirmationMessage.getText().contains(expectedText);
+            boolean isDisplayed = confirmationMessage.getText().contains(expectedText);
+            logger.info("Confirmation message displayed: {}", isDisplayed);
+            return isDisplayed;
         } catch (Exception e) {
+            logger.warn("⚠️ Confirmation message not found or timeout: {}", e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Get the confirmation title text
+     */
+    public String getConfirmationTitle() {
+        logger.info("Getting confirmation title text");
+        wait.until(ExpectedConditions.visibilityOf(confirmationTitle));
+        String titleText = confirmationTitle.getText();
+        logger.info("Confirmation title: {}", titleText);
+        return titleText;
     }
 
     /**
      * Close the popup
      */
     public HomePage closePopup() {
-        WebElement closeBtn = wait.until(ExpectedConditions.elementToBeClickable(CLOSE_BUTTON));
+        logger.info("Closing confirmation popup");
+        WebElement closeBtn = wait.until(ExpectedConditions.elementToBeClickable(closeButton));
         closeBtn.click();
         return new HomePage(driver);
     }
@@ -84,6 +121,33 @@ public class ApprovalMoneyPage extends BasePage {
      * Wait for popup to disappear
      */
     public void waitForPopupToDisappear() {
-        wait.until(ExpectedConditions.invisibilityOf(popupOverlay));
+        logger.info("Waiting for popup to disappear");
+        wait.until(ExpectedConditions.invisibilityOf(confirmationTitle));
+        logger.info("✅ Popup disappeared");
+    }
+
+    /**
+     * Check if approve button is enabled and clickable
+     */
+    public boolean isApproveButtonEnabled() {
+        logger.info("Checking if approve button is enabled");
+        boolean isEnabled = approveTransferButton.isEnabled();
+        logger.info("Approve button enabled: {}", isEnabled);
+        return isEnabled;
+    }
+
+    /**
+     * Check if all page elements are displayed
+     */
+    public boolean isPageLoaded() {
+        logger.info("Checking if approval money page is fully loaded");
+        try {
+            return confirmationTitle.isDisplayed() &&
+                   confirmationMessage.isDisplayed() &&
+                   approveTransferButton.isDisplayed();
+        } catch (Exception e) {
+            logger.error("Page not fully loaded: {}", e.getMessage());
+            return false;
+        }
     }
 }

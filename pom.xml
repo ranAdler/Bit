@@ -75,7 +75,15 @@
             <version>2.25.0</version>
         </dependency>
 
-        <!-- Selenium WebDriver for UI Testing -->
+        <!-- Appium Java Client for Android testing -->
+        <dependency>
+            <groupId>io.appium</groupId>
+            <artifactId>java-client</artifactId>
+            <version>8.6.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Selenium WebDriver (compatible with Appium 8.6.0) -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -83,13 +91,21 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- WebDriverManager for automatic driver management -->
+        <!-- JSON processing (for Appium capabilities) -->
         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- WebDriverManager (commented out - using Appium instead) -->
+        <!-- <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.6.3</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
 
         <!-- Log4j2 for logging -->
         <dependency>

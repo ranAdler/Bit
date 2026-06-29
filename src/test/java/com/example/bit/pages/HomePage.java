@@ -1,36 +1,54 @@
 package com.example.bit.pages;
 
-import org.openqa.selenium.WebDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+/**
+ * Page Object for Android Home Screen
+ */
 public class HomePage extends BasePage {
 
-    @FindBy(className = "homePage")
+    private static final Logger logger = LogManager.getLogger(HomePage.class);
+
+    // ============================================
+    // Android Page Elements
+    // ============================================
+    @AndroidFindBy(id = "com.example.approvalapp:id/home_page")
     private WebElement homePagePath;
 
-    @FindBy(className = "infoIcon")
+    @AndroidFindBy(id = "com.example.approvalapp:id/info_icon")
     private WebElement infoIconPath;
 
-    @FindBy(id = "data")
+    @AndroidFindBy(id = "com.example.approvalapp:id/data")
     private WebElement dataPath;
 
-    @FindBy(className = "move-to-approval")
+    @AndroidFindBy(id = "com.example.approvalapp:id/move_to_approval")
     private WebElement moveToApprovalPath;
 
-    public HomePage(WebDriver driver) {
+    public HomePage(AndroidDriver driver) {
         super(driver);
-        wait.until(ExpectedConditions.visibilityOf(homePagePath));
+        try {
+            wait.until(ExpectedConditions.visibilityOf(homePagePath));
+            logger.info("✅ HomePage loaded");
+        } catch (Exception e) {
+            logger.warn("⚠️ Timeout waiting for home page: {}", e.getMessage());
+        }
     }
 
     public HomePage selectInfoIcon() {
+        logger.info("Clicking info icon");
         infoIconPath.click();
         wait.until(ExpectedConditions.visibilityOf(dataPath));
+        logger.info("✅ Data section displayed");
         return this;
     }
 
     public ApprovalMoneyPage moveToApproval() {
+        logger.info("Moving to approval page");
         moveToApprovalPath.click();
         return new ApprovalMoneyPage(driver);
     }
