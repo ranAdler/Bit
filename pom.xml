@@ -102,6 +102,21 @@
             <artifactId>log4j-api</artifactId>
             <version>2.23.0</version>
         </dependency>
+
+        <!-- Spring JCL (Commons Logging bridge) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jcl</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- Exclude commons-logging to avoid conflicts -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

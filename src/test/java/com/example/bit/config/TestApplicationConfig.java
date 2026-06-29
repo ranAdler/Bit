@@ -13,9 +13,11 @@ import org.springframework.context.annotation.PropertySources;
 @Configuration
 @PropertySources({
     @PropertySource("classpath:test.properties"),
-    @PropertySource(value = "classpath:dev.properties", ignoreResourceNotFound = true)
+    @PropertySource(value = "classpath:dev.properties", ignoreResourceNotFound = true),
+    @PropertySource(value = "classpath:staging.properties", ignoreResourceNotFound = true),
+    @PropertySource(value = "classpath:prod.properties", ignoreResourceNotFound = true)
 })
-@ComponentScan(basePackages = {"com.example.bit.utils", "com.example.bit.validators", "com.example.bit.service"})
+@ComponentScan(basePackages = {"com.example.bit"})
 @Import(SqsConfig.class)
 public class TestApplicationConfig {
 

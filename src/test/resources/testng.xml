@@ -2,26 +2,21 @@
 <suite name="Bit Payment Tests" verbose="2">
     <listeners>
         <listener class-name="com.example.bit.listener.SoftAssertListener"/>
+        <listener class-name="com.example.bit.listener.UITestListener"/>
     </listeners>
 
     <!-- UI Tests -->
     <test name="Money Approval UI Tests">
         <classes>
-            <class name="com.example.bit.tests.ui.ApprovalMoneyUITest">
-                <methods>
-                    <include name="testApprovalPopupIsDisplayed"/>
-                    <include name="testClickApproveTransferButton"/>
-                    <include name="testConfirmationMessageIsDisplayed"/>
-                    <include name="testCompleteApprovalFlow"/>
-                </methods>
-            </class>
+            <class name="com.example.bit.tests.ui.ApprovalMoneyUITest"/>
         </classes>
     </test>
+
 
     <!-- API Tests -->
     <test name="Payment Request API Tests">
         <classes>
-            <class name="com.example.bit.tests.BitApplicationTests"/>
+            <class name="com.example.bit.tests.api.BitApplicationTests"/>
         </classes>
     </test>
 </suite>
