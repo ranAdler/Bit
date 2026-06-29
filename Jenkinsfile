@@ -1,4 +1,4 @@
-pipeline {
+    pipeline {
     agent any
 
     parameters {
@@ -101,19 +101,24 @@ pipeline {
             steps {
                 script {
                     echo "🧪 Running API Tests for ${params.ENVIRONMENT}..."
-                    withEnv([
-                        "ENVIRONMENT=${params.ENVIRONMENT}",
-                        "API_BASE_URL=${API_BASE_URL}",
-                        "LOG_LEVEL=${LOG_LEVEL}"
+                    withCredentials([
+                        string(credentialsId: "aws-access-key-${params.ENVIRONMENT}", variable: 'AWS_ACCESS_KEY_ID'),
+                        string(credentialsId: "aws-secret-key-${params.ENVIRONMENT}", variable: 'AWS_SECRET_ACCESS_KEY')
                     ]) {
-                        sh '''
-                            mvn clean test \
-                                -Dapp.environment=${ENVIRONMENT} \
-                                -Dapi.base.url=${API_BASE_URL} \
-                                -Dlog.level=${LOG_LEVEL} \
-                                -Dtest=BitApplicationTests \
-                                -DsuiteXmlFile=src/test/resources/testng.xml
-                        '''
+                        withEnv([
+                            "ENVIRONMENT=${params.ENVIRONMENT}",
+                            "API_BASE_URL=${API_BASE_URL}",
+                            "LOG_LEVEL=${LOG_LEVEL}"
+                        ]) {
+                            sh '''
+                                mvn clean test \
+                                    -Dapp.environment=${ENVIRONMENT} \
+                                    -Dapi.base.url=${API_BASE_URL} \
+                                    -Dlog.level=${LOG_LEVEL} \
+                                    -Daws.access.key.id=${AWS_ACCESS_KEY_ID} \
+                                    -Daws.secret.access.key=${AWS_SECRET_ACCESS_KEY}
+                            '''
+                        }
                     }
                     echo "✅ API Tests completed"
                 }
@@ -127,21 +132,26 @@ pipeline {
             steps {
                 script {
                     echo "🖥️  Running UI Tests for ${params.ENVIRONMENT}..."
-                    withEnv([
-                        "ENVIRONMENT=${params.ENVIRONMENT}",
-                        "APP_URL=${APP_URL}",
-                        "APP_BROWSER=${params.BROWSER}",
-                        "LOG_LEVEL=${LOG_LEVEL}"
+                    withCredentials([
+                        string(credentialsId: "aws-access-key-${params.ENVIRONMENT}", variable: 'AWS_ACCESS_KEY_ID'),
+                        string(credentialsId: "aws-secret-key-${params.ENVIRONMENT}", variable: 'AWS_SECRET_ACCESS_KEY')
                     ]) {
-                        sh '''
-                            mvn clean test \
-                                -Dapp.environment=${ENVIRONMENT} \
-                                -Dapp.url=${APP_URL} \
-                                -Dapp.browser=${APP_BROWSER} \
-                                -Dlog.level=${LOG_LEVEL} \
-                                -Dtest=ApprovalMoneyUITest \
-                                -DsuiteXmlFile=src/test/resources/testng.xml
-                        '''
+                        withEnv([
+                            "ENVIRONMENT=${params.ENVIRONMENT}",
+                            "APP_URL=${APP_URL}",
+                            "APP_BROWSER=${params.BROWSER}",
+                            "LOG_LEVEL=${LOG_LEVEL}"
+                        ]) {
+                            sh '''
+                                mvn clean test \
+                                    -Dapp.environment=${ENVIRONMENT} \
+                                    -Dapp.url=${APP_URL} \
+                                    -Dapp.browser=${APP_BROWSER} \
+                                    -Dlog.level=${LOG_LEVEL} \
+                                    -Daws.access.key.id=${AWS_ACCESS_KEY_ID} \
+                                    -Daws.secret.access.key=${AWS_SECRET_ACCESS_KEY}
+                            '''
+                        }
                     }
                     echo "✅ UI Tests completed"
                 }
