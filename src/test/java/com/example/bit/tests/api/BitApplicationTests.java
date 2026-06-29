@@ -1,4 +1,4 @@
-package com.example.bit.tests;
+package com.example.bit.tests.api;
 
 import com.example.bit.model.PaymentRequest;
 import com.example.bit.model.PaymentResponse;

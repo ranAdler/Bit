@@ -4,7 +4,22 @@
         <listener class-name="com.example.bit.listener.SoftAssertListener"/>
     </listeners>
 
-    <test name="Payment Request Tests">
+    <!-- UI Tests -->
+    <test name="Money Approval UI Tests">
+        <classes>
+            <class name="com.example.bit.tests.ui.ApprovalMoneyUITest">
+                <methods>
+                    <include name="testApprovalPopupIsDisplayed"/>
+                    <include name="testClickApproveTransferButton"/>
+                    <include name="testConfirmationMessageIsDisplayed"/>
+                    <include name="testCompleteApprovalFlow"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- API Tests -->
+    <test name="Payment Request API Tests">
         <classes>
             <class name="com.example.bit.tests.BitApplicationTests"/>
         </classes>
