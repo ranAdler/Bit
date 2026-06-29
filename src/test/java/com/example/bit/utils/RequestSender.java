@@ -17,7 +17,7 @@ public class RequestSender {
     }
 
     public <T> T post(String endpoint, Object requestBody, Class<T> responseClass) {
-        return sendRequest(endpoint, "POST", requestBody, responseClass, HttpStatusCode.SUCCESS.getCode());
+        return sendRequest(endpoint, "POST", requestBody, responseClass, HttpStatusCode.OK.getCode());
     }
 
 
@@ -26,19 +26,19 @@ public class RequestSender {
     }
 
     public <T> T put(String endpoint, Object requestBody, Class<T> responseClass) {
-        return sendRequest(endpoint, "PUT", requestBody, responseClass, HttpStatusCode.SUCCESS.getCode());
+        return sendRequest(endpoint, "PUT", requestBody, responseClass, HttpStatusCode.OK.getCode());
     }
 
     public <T> T patch(String endpoint, Object requestBody, Class<T> responseClass) {
-        return sendRequest(endpoint, "PATCH", requestBody, responseClass, HttpStatusCode.SUCCESS.getCode());
+        return sendRequest(endpoint, "PATCH", requestBody, responseClass, HttpStatusCode.OK.getCode());
     }
 
     public <T> T get(String endpoint, Class<T> responseClass) {
-        return sendRequest(endpoint, "GET", null, responseClass, HttpStatusCode.SUCCESS.getCode());
+        return sendRequest(endpoint, "GET", null, responseClass, HttpStatusCode.OK.getCode());
     }
 
     public <T> T delete(String endpoint, Class<T> responseClass) {
-        return sendRequest(endpoint, "DELETE", null, responseClass, HttpStatusCode.SUCCESS.getCode());
+        return sendRequest(endpoint, "DELETE", null, responseClass, HttpStatusCode.OK.getCode());
     }
 
     private <T> T sendRequest(String endpoint, String httpMethod, Object requestBody, Class<T> responseClass, int httpStatusCode) {
