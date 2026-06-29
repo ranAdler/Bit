@@ -14,6 +14,8 @@ public class PaymentResponse {
 
     private String timestamp;
 
+    private String message;
+
     public PaymentResponse() {}
 
     public PaymentResponse(String transactionId, Double amount, String senderPhone,
@@ -70,6 +72,14 @@ public class PaymentResponse {
         return timestamp;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
@@ -77,8 +87,8 @@ public class PaymentResponse {
     public static Builder builder() {
         return new Builder();
     }
-
     public static class Builder {
+
         private String transactionId;
         private Double amount;
         private String senderPhone;
